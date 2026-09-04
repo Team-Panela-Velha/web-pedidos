@@ -9,13 +9,31 @@ import routerProvider, {
   UnsavedChangesNotifier,
   DocumentTitleHandler,
 } from "@refinedev/react-router";
-import { LayoutDashboard, FolderTree } from "lucide-react";
+import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2 } from "lucide-react";
 import {
   CategoryList,
   CategoryCreate,
   CategoryEdit,
   CategoryShow,
 } from "./pages/categories";
+import {
+  ProductList,
+  ProductCreate,
+  ProductEdit,
+  ProductShow,
+} from "./pages/products";
+import {
+  ExtraList,
+  ExtraCreate,
+  ExtraEdit,
+  ExtraShow,
+} from "./pages/extras";
+import {
+  TableList,
+  TableCreate,
+  TableEdit,
+  TableShow,
+} from "./pages/tables";
 import { Dashboard } from "./pages/dashboard";
 import { dataProvider } from "./providers/data";
 import { authProvider } from "./providers/auth";
@@ -61,6 +79,42 @@ function App() {
                     canDelete: true,
                   },
                 },
+                {
+                  name: "products",
+                  list: "/products",
+                  create: "/products/create",
+                  edit: "/products/edit/:id",
+                  show: "/products/show/:id",
+                  meta: {
+                    label: "Produtos",
+                    icon: <Package className="h-4 w-4" />,
+                    canDelete: true,
+                  },
+                },
+                {
+                  name: "extras",
+                  list: "/extras",
+                  create: "/extras/create",
+                  edit: "/extras/edit/:id",
+                  show: "/extras/show/:id",
+                  meta: {
+                    label: "Extras",
+                    icon: <PlusCircle className="h-4 w-4" />,
+                    canDelete: true,
+                  },
+                },
+                {
+                  name: "tables",
+                  list: "/tables",
+                  create: "/tables/create",
+                  edit: "/tables/edit/:id",
+                  show: "/tables/show/:id",
+                  meta: {
+                    label: "Mesas",
+                    icon: <Table2 className="h-4 w-4" />,
+                    canDelete: true,
+                  },
+                },
               ]}
               options={{
                 syncWithLocation: true,
@@ -87,6 +141,24 @@ function App() {
                     <Route path="create" element={<CategoryCreate />} />
                     <Route path="edit/:id" element={<CategoryEdit />} />
                     <Route path="show/:id" element={<CategoryShow />} />
+                  </Route>
+                  <Route path="/products">
+                    <Route index element={<ProductList />} />
+                    <Route path="create" element={<ProductCreate />} />
+                    <Route path="edit/:id" element={<ProductEdit />} />
+                    <Route path="show/:id" element={<ProductShow />} />
+                  </Route>
+                  <Route path="/extras">
+                    <Route index element={<ExtraList />} />
+                    <Route path="create" element={<ExtraCreate />} />
+                    <Route path="edit/:id" element={<ExtraEdit />} />
+                    <Route path="show/:id" element={<ExtraShow />} />
+                  </Route>
+                  <Route path="/tables">
+                    <Route index element={<TableList />} />
+                    <Route path="create" element={<TableCreate />} />
+                    <Route path="edit/:id" element={<TableEdit />} />
+                    <Route path="show/:id" element={<TableShow />} />
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
