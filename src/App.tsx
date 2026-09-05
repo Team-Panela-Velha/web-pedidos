@@ -9,7 +9,7 @@ import routerProvider, {
   UnsavedChangesNotifier,
   DocumentTitleHandler,
 } from "@refinedev/react-router";
-import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2 } from "lucide-react";
+import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2, Receipt } from "lucide-react";
 import {
   CategoryList,
   CategoryCreate,
@@ -34,6 +34,7 @@ import {
   TableEdit,
   TableShow,
 } from "./pages/tables";
+import { TabGrid } from "./pages/tabs";
 import { Dashboard } from "./pages/dashboard";
 import { dataProvider } from "./providers/data";
 import { authProvider } from "./providers/auth";
@@ -115,6 +116,14 @@ function App() {
                     canDelete: true,
                   },
                 },
+                {
+                  name: "tabs",
+                  list: "/tabs",
+                  meta: {
+                    label: "Comandas",
+                    icon: <Receipt className="h-4 w-4" />,
+                  },
+                },
               ]}
               options={{
                 syncWithLocation: true,
@@ -160,6 +169,7 @@ function App() {
                     <Route path="edit/:id" element={<TableEdit />} />
                     <Route path="show/:id" element={<TableShow />} />
                   </Route>
+                  <Route path="/tabs" element={<TabGrid />} />
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
                 <Route
