@@ -331,7 +331,10 @@ export const TabGrid = () => {
           row.original.closed ? (
             <Badge variant="outline">Encerrada</Badge>
           ) : (
-            <Badge variant="default" className="bg-green-600 hover:bg-green-700">
+            <Badge
+              variant="default"
+              className="bg-success text-success-foreground hover:bg-success/90"
+            >
               Aberta
             </Badge>
           ),
@@ -391,7 +394,7 @@ export const TabGrid = () => {
           type: "success",
         });
         setPendingId(null);
-        table.refineCore.refetch?.();
+        table.refineCore.tableQuery.refetch();
       } catch (error) {
         open?.({
           message: "Erro ao encerrar comanda",

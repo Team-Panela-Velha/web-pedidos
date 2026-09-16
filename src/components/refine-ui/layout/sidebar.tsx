@@ -35,7 +35,10 @@ export function Sidebar() {
   const { menuItems, selectedKey } = useMenu();
 
   return (
-    <ShadcnSidebar collapsible="icon" className={cn("border-none")}>
+    <ShadcnSidebar
+      collapsible="icon"
+      className={cn("border-r", "border-sidebar-border")}
+    >
       <ShadcnSidebarRail />
       <SidebarHeader />
       <ShadcnSidebarContent
@@ -47,8 +50,7 @@ export function Sidebar() {
           "gap-2",
           "pt-2",
           "pb-2",
-          "border-r",
-          "border-border",
+          "bg-sidebar",
           {
             "px-3": open,
             "px-1": !open,
@@ -219,7 +221,8 @@ function SidebarHeader() {
         "p-0",
         "h-16",
         "border-b",
-        "border-border",
+          "border-sidebar-border",
+          "bg-sidebar",
         "flex-row",
         "items-center",
         "justify-between",
@@ -246,7 +249,8 @@ function SidebarHeader() {
         <div>{title.icon}</div>
         <h2
           className={cn(
-            "text-sm",
+            "font-display",
+            "text-lg",
             "font-bold",
             "transition-opacity",
             "duration-200",
@@ -340,10 +344,10 @@ function SidebarButton({
       variant="ghost"
       size="lg"
       className={cn(
-        "flex w-full items-center justify-start gap-2 py-2 !px-3 text-sm",
+        "flex w-full items-center justify-start gap-2 rounded-xl py-2 !px-3 text-sm",
         {
           "bg-sidebar-primary": isSelected,
-          "hover:!bg-sidebar-primary/90": isSelected,
+          "shadow-sm hover:!bg-sidebar-primary/90": isSelected,
           "text-sidebar-primary-foreground": isSelected,
           "hover:text-sidebar-primary-foreground": isSelected,
         },

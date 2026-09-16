@@ -34,14 +34,24 @@ function DesktopHeader() {
         "gap-4",
         "border-b",
         "border-border",
-        "bg-sidebar",
-        "pr-3",
-        "justify-end",
+        "bg-sidebar/95",
+        "px-4",
+        "justify-between",
+        "backdrop-blur-md",
+        "shadow-[0_2px_12px_rgb(75_69_68/0.04)]",
         "z-40"
       )}
     >
-      <ThemeToggle />
-      <UserDropdown />
+      <div>
+        <p className="font-display text-lg font-semibold leading-tight">
+          Gestão do restaurante
+        </p>
+        <p className="text-xs text-muted-foreground">Pokes e Boas</p>
+      </div>
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+        <UserDropdown />
+      </div>
     </header>
   );
 }
@@ -63,7 +73,8 @@ function MobileHeader() {
         "gap-2",
         "border-b",
         "border-border",
-        "bg-sidebar",
+        "bg-sidebar/95",
+        "backdrop-blur-md",
         "pr-3",
         "justify-between",
         "z-40"
@@ -98,7 +109,8 @@ function MobileHeader() {
         <div>{title.icon}</div>
         <h2
           className={cn(
-            "text-sm",
+            "font-display",
+            "text-base",
             "font-bold",
             "transition-opacity",
             "duration-200",

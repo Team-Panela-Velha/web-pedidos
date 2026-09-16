@@ -80,7 +80,16 @@ export function DataTable<TData extends BaseRecord>({
 
   return (
     <div className={cn("flex", "flex-col", "flex-1", "gap-4")}>
-      <div ref={tableContainerRef} className={cn("rounded-md", "border")}>
+      <div
+        ref={tableContainerRef}
+        className={cn(
+          "overflow-hidden",
+          "rounded-2xl",
+          "border",
+          "bg-card",
+          "[box-shadow:var(--shadow-card)]",
+        )}
+      >
         <Table ref={tableRef} style={{ tableLayout: "fixed", width: "100%" }}>
           <TableHeader>
             {getHeaderGroups().map((headerGroup) => (

@@ -46,6 +46,7 @@ import { Layout } from "./components/refine-ui/layout/layout";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
 import { Toaster } from "./components/refine-ui/notification/toaster";
 import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
+import { BrandIcon } from "./components/brand-icon";
 import "./App.css";
 
 function App() {
@@ -129,6 +130,10 @@ function App() {
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: true,
                 projectId: "u4IsEg-nf6kM6-Cs7Vo2",
+                title: {
+                  text: "Pokes e Boas",
+                  icon: <BrandIcon />,
+                },
               }}
             >
               <Routes>

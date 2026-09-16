@@ -19,7 +19,18 @@ type EditViewProps = PropsWithChildren<{
 
 export function EditView({ children, className }: EditViewProps) {
   return (
-    <div className={cn("flex flex-col", "gap-4", className)}>{children}</div>
+    <div
+      className={cn(
+        "flex flex-col",
+        "gap-5",
+        "[&>form]:mx-auto [&>form]:w-full [&>form]:max-w-3xl",
+        "[&>form]:rounded-2xl [&>form]:border [&>form]:bg-card",
+        "[&>form]:p-5 [&>form]:[box-shadow:var(--shadow-card)] md:[&>form]:p-8",
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -78,7 +89,7 @@ export const EditViewHeader = ({
           <Button variant="ghost" size="icon" onClick={back}>
             <ArrowLeftIcon className="h-4 w-4" />
           </Button>
-          <h2 className="text-2xl font-bold">{title}</h2>
+          <h2 className="font-display text-3xl font-bold">{title}</h2>
         </div>
 
         <div className="flex items-center gap-2">

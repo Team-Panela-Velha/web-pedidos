@@ -62,7 +62,8 @@ export const SignInForm = () => {
         "justify-center",
         "px-6",
         "py-8",
-        "min-h-svh"
+        "min-h-svh",
+        "bg-[radial-gradient(circle_at_top,var(--secondary),transparent_48%)]"
       )}
     >
       <div className={cn("flex", "items-center", "justify-center")}>
@@ -75,12 +76,11 @@ export const SignInForm = () => {
         )}
       </div>
 
-      <Card className={cn("sm:w-[456px]", "p-12", "mt-6")}>
+      <Card className={cn("w-full", "max-w-[456px]", "p-6", "sm:p-10", "mt-6")}>
         <CardHeader className={cn("px-0")}>
           <CardTitle
             className={cn(
-              "text-blue-600",
-              "dark:text-blue-400",
+              "text-accent-foreground",
               "text-3xl",
               "font-semibold"
             )}
@@ -145,9 +145,7 @@ export const SignInForm = () => {
                   "flex",
                   "items-center",
                   "gap-2",
-                  "text-primary hover:underline",
-                  "text-blue-600",
-                  "dark:text-blue-400"
+                  "text-accent-foreground hover:underline"
                 )}
               >
                 <span>Forgot password</span>
@@ -226,8 +224,7 @@ export const SignInForm = () => {
             <Link
               to="/register"
               className={cn(
-                "text-green-600",
-                "dark:text-green-400",
+                "text-accent-foreground",
                 "font-semibold",
                 "underline"
               )}

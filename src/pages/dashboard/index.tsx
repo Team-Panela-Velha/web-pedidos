@@ -35,33 +35,38 @@ const indicators: Indicator[] = [
 
 export const Dashboard = () => {
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
+    <div className="flex flex-col gap-6 py-2 md:py-4">
+      <div className="flex flex-col gap-2 rounded-2xl border bg-secondary/70 p-5 md:p-7">
+        <span className="w-fit rounded-full bg-primary/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary-foreground">
+          Operação
+        </span>
+        <h1 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
           Painel do restaurante
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="max-w-2xl text-sm text-muted-foreground">
           Visao geral operacional. Os indicadores serao alimentados pela API.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {indicators.map(({ key, label, value, icon: Icon }) => (
-          <Card key={key}>
+          <Card key={key} className="group hover:border-primary/70 hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {label}
               </CardTitle>
-              <Icon className="h-4 w-4 text-muted-foreground" />
+              <span className="flex size-10 items-center justify-center rounded-xl bg-icon-surface text-accent-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <Icon className="h-5 w-5" />
+              </span>
             </CardHeader>
             <CardContent>
-              <span className="text-2xl font-bold">{value}</span>
+              <span className="font-display text-3xl font-bold">{value}</span>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <Card>
+      <Card className="bg-icon-surface/55">
         <CardHeader>
           <CardTitle>RMS — Sistema de Gerenciamento</CardTitle>
           <CardDescription>
