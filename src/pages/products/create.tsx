@@ -41,6 +41,7 @@ export const ProductCreate = () => {
     resource: "categories",
     optionLabel: "name",
     optionValue: "id",
+    pagination: { mode: "off" },
   });
 
   function onSubmit(values: Record<string, unknown>) {

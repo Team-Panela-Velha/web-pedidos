@@ -112,6 +112,21 @@ export const ProductList = () => {
   return (
     <ListView>
       <ListViewHeader />
+      <select
+        aria-label="Filtrar produtos por disponibilidade"
+        className="h-10 w-fit rounded-xl border border-input bg-background px-3 text-sm"
+        defaultValue="all"
+        onChange={(event) => {
+          table.refineCore.setCurrentPage(1);
+          table.refineCore.setFilters([
+            { field: "available", operator: "eq", value: event.target.value === "all" ? undefined : event.target.value === "available" },
+          ], "merge");
+        }}
+      >
+        <option value="all">Todos os produtos</option>
+        <option value="available">Disponíveis</option>
+        <option value="unavailable">Indisponíveis</option>
+      </select>
       <DataTable table={table} />
     </ListView>
   );

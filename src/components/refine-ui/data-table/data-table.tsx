@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/refine-ui/data-table/data-table-pagination";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 type DataTableProps<TData extends BaseRecord> = {
   table: UseTableReturnType<TData, HttpError>;
@@ -34,6 +36,7 @@ export function DataTable<TData extends BaseRecord>({
       pageCount,
       pageSize,
       setPageSize,
+      setFilters,
     },
   } = table;
 
@@ -80,6 +83,20 @@ export function DataTable<TData extends BaseRecord>({
 
   return (
     <div className={cn("flex", "flex-col", "flex-1", "gap-4")}>
+      <Input
+        aria-label="Buscar registros"
+        placeholder="Buscar registros"
+        className="max-w-sm"
+        onChange={(event) => {
+          setCurrentPage(1);
+          setFilters([{ field: "q", operator: "contains", value: event.target.value }], "merge");
+        }}
+      />
+      {tableQuery.isError && (
+        <div className="rounded-xl border p-4 text-sm">
+          Falha ao carregar registros. <Button variant="outline" onClick={() => void tableQuery.refetch()}>Tentar novamente</Button>
+        </div>
+      )}
       <div
         ref={tableContainerRef}
         className={cn(
@@ -108,12 +125,15 @@ export function DataTable<TData extends BaseRecord>({
                       }}
                     >
                       {isPlaceholder ? null : (
-                        <div className={cn("flex", "items-center", "gap-1")}>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </div>
+                        <button
+                          type="button"
+                          className={cn("flex", "items-center", "gap-1", header.column.getCanSort() && "cursor-pointer hover:text-primary")}
+                          disabled={!header.column.getCanSort()}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {header.column.getIsSorted() === "asc" ? "↑" : header.column.getIsSorted() === "desc" ? "↓" : null}
+                        </button>
                       )}
                     </TableHead>
                   );
