@@ -39,8 +39,6 @@ import { Dashboard } from "./pages/dashboard";
 import { dataProvider } from "./providers/data";
 import { authProvider } from "./providers/auth";
 import { Login } from "./pages/login";
-import { Register } from "./pages/register";
-import { ForgotPassword } from "./pages/forgot-password";
 import { ErrorComponent } from "./components/refine-ui/layout/error-component";
 import { Layout } from "./components/refine-ui/layout/layout";
 import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
@@ -188,8 +186,6 @@ function App() {
                   }
                 >
                   <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Route>
               </Routes>
 

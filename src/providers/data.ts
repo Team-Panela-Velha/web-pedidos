@@ -1,9 +1,16 @@
-import type { BaseRecord, CrudFilter, DataProvider, GetListParams, GetListResponse, DeleteOneParams, DeleteOneResponse, GetOneParams, GetOneResponse, UpdateParams, UpdateResponse } from "@refinedev/core";
+import type { BaseRecord, CrudFilter, DataProvider, CreateParams, CreateResponse, GetListParams, GetListResponse, DeleteOneParams, DeleteOneResponse, GetOneParams, GetOneResponse, UpdateParams, UpdateResponse } from "@refinedev/core";
 import { createSimpleRestDataProvider } from "@refinedev/rest/simple-rest";
 import { API_URL } from "./constants";
+import { TOKEN_KEY } from "./constants";
 
-const { dataProvider: restProvider, kyInstance } = createSimpleRestDataProvider({
+const { dataProvider: restProvider, kyInstance: baseKy } = createSimpleRestDataProvider({
   apiURL: API_URL,
+});
+const kyInstance = baseKy.extend({
+  hooks: { beforeRequest: [(request) => {
+    const token = sessionStorage.getItem(TOKEN_KEY);
+    if (token) request.headers.set("Authorization", `Bearer ${token}`);
+  }] },
 });
 
 type RecordValue = string | number | boolean | null | undefined;
@@ -51,6 +58,10 @@ export { kyInstance };
 
 export const dataProvider: DataProvider = {
   ...restProvider,
+  create: async <TData extends BaseRecord = BaseRecord, TVariables = unknown>({ resource, variables }: CreateParams<TVariables>): Promise<CreateResponse<TData>> => {
+    const response = await kyInstance.post(resource, { json: variables });
+    return { data: await response.json() as TData };
+  },
   getList: async <TData extends BaseRecord = BaseRecord>({ resource, pagination, filters = [], sorters = [] }: GetListParams): Promise<GetListResponse<TData>> => {
     const response = await kyInstance.get(resource);
     if (!response.ok) throw new Error(`Erro ao carregar ${resource}: HTTP ${response.status}`);

@@ -1,4 +1,5 @@
 import Config from "@/Config";
+import { TOKEN_KEY } from "@/providers/constants";
 
 
 export interface RequestOptions extends RequestInit {
@@ -70,6 +71,7 @@ class ApiService {
       headers: {
         "Content-Type": "application/json",
         ...this.defaultOptions.headers,
+        ...(sessionStorage.getItem(TOKEN_KEY) ? { Authorization: `Bearer ${sessionStorage.getItem(TOKEN_KEY)}` } : {}),
         ...headers,
       },
       body: serializedBody,

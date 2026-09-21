@@ -5,9 +5,7 @@ import { cn } from "@/lib/utils";
 
 type User = {
   id: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
+  name: string;
   email: string;
   avatar?: string;
 };
@@ -19,12 +17,12 @@ export function UserAvatar() {
     return <Skeleton className={cn("h-10", "w-10", "rounded-full")} />;
   }
 
-  const { fullName, avatar } = user;
+  const { name, avatar } = user;
 
   return (
     <Avatar className={cn("h-10", "w-10")}>
-      {avatar && <AvatarImage src={avatar} alt={fullName} />}
-      <AvatarFallback>{getInitials(fullName)}</AvatarFallback>
+      {avatar && <AvatarImage src={avatar} alt={name} />}
+      <AvatarFallback>{getInitials(name)}</AvatarFallback>
     </Avatar>
   );
 }

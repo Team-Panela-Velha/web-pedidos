@@ -1,58 +1,78 @@
 import type { AuthProvider } from "@refinedev/core";
+import { authService } from "@/services/auth/authService";
+import { apiService } from "@/services/apiService";
+import type { UserResponse } from "@/types/user/userTypes";
 import { TOKEN_KEY } from "./constants";
 
-export const authProvider: AuthProvider = {
-  login: async ({ username, email, password }) => {
-    if ((username || email) && password) {
-      localStorage.setItem(TOKEN_KEY, username);
-      return {
-        success: true,
-        redirectTo: "/",
-      };
-    }
+const IDENTITY_KEY = "refine-identity";
 
-    return {
-      success: false,
-      error: {
+function clearSession() {
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(IDENTITY_KEY);
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+export const authProvider: AuthProvider = {
+  login: async ({ email, password }) => {
+    try {
+      const response = await authService.login({ email, password });
+      sessionStorage.setItem(TOKEN_KEY, response.token);
+      sessionStorage.setItem(IDENTITY_KEY, JSON.stringify({
+        id: response.id, name: response.name, email: response.email, role: response.role,
+      }));
+      return { success: true, redirectTo: "/" };
+    } catch (error) {
+      clearSession();
+      const status = (error as { status?: number }).status;
+      return { success: false, error: {
         name: "LoginError",
-        message: "Invalid username or password",
-      },
-    };
+        message: status === 401 ? "E-mail ou senha inválidos." : "Não foi possível entrar. Tente novamente.",
+      } };
+    }
   },
   logout: async () => {
-    localStorage.removeItem(TOKEN_KEY);
-    return {
-      success: true,
-      redirectTo: "/login",
-    };
+    try {
+      if (sessionStorage.getItem(TOKEN_KEY)) await authService.logout();
+    } catch {
+      // Local logout still succeeds when the server is unavailable.
+    } finally {
+      clearSession();
+    }
+    return { success: true, redirectTo: "/login" };
   },
   check: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      return {
-        authenticated: true,
-      };
+    if (!sessionStorage.getItem(TOKEN_KEY)) return { authenticated: false, redirectTo: "/login" };
+    try {
+      const user = await apiService.get<UserResponse>("/auth/me");
+      sessionStorage.setItem(IDENTITY_KEY, JSON.stringify(user));
+      return { authenticated: true };
+    } catch (error) {
+      const status = (error as { status?: number }).status;
+      if (status === 401 || status === 403) {
+        clearSession();
+        return { authenticated: false, redirectTo: "/login" };
+      }
+      return { authenticated: true };
     }
-
-    return {
-      authenticated: false,
-      redirectTo: "/login",
-    };
   },
-  getPermissions: async () => null,
+  getPermissions: async () => {
+    const identity = sessionStorage.getItem(IDENTITY_KEY);
+    return identity ? JSON.parse(identity).role : null;
+  },
   getIdentity: async () => {
-    const token = localStorage.getItem(TOKEN_KEY);
-    if (token) {
-      return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300",
-      };
-    }
-    return null;
+    const identity = sessionStorage.getItem(IDENTITY_KEY);
+    return identity ? JSON.parse(identity) : null;
   },
   onError: async (error) => {
-    console.error(error);
+    const status = (error as { status?: number; response?: { status?: number } }).status
+      ?? (error as { response?: { status?: number } }).response?.status;
+    if (status === 401) {
+      clearSession();
+      return { logout: true, redirectTo: "/login", error };
+    }
+    if (status === 403) {
+      return { error: { name: "Forbidden", message: "Você não tem permissão para esta operação." } };
+    }
     return { error };
   },
 };
