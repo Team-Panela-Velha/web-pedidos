@@ -10,6 +10,7 @@ import routerProvider, {
   DocumentTitleHandler,
 } from "@refinedev/react-router";
 import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2, Receipt } from "lucide-react";
+import { lazy, Suspense } from "react";
 import {
   CategoryList,
   CategoryCreate,
@@ -35,7 +36,7 @@ import {
   TableShow,
 } from "./pages/tables";
 import { TabGrid } from "./pages/tabs";
-import { Dashboard } from "./pages/dashboard";
+const Dashboard = lazy(() => import("./pages/dashboard").then((module) => ({ default: module.Dashboard })));
 import { dataProvider } from "./providers/data";
 import { authProvider } from "./providers/auth";
 import { Login } from "./pages/login";
@@ -147,7 +148,7 @@ function App() {
                     </Authenticated>
                   }
                 >
-                  <Route index element={<Dashboard />} />
+                  <Route index element={<Suspense fallback={<div className="p-6 text-sm text-muted-foreground">Carregando painel...</div>}><Dashboard /></Suspense>} />
                   <Route path="/categories">
                     <Route index element={<CategoryList />} />
                     <Route path="create" element={<CategoryCreate />} />
