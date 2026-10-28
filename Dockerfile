@@ -1,37 +1,25 @@
-# This Dockerfile uses `serve` npm package to serve the static files with node process.
-# You can find the Dockerfile for nginx in the following link:
-# https://github.com/refinedev/dockerfiles/blob/main/vite/Dockerfile.nginx
-FROM refinedev/node:18 AS base
+FROM node:20-alpine AS build
 
-FROM base as deps
+WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+RUN corepack enable
 
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-FROM base as builder
-
-ENV NODE_ENV production
-
-COPY --from=deps /app/refine/node_modules ./node_modules
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN npm run build
+# Vite embeds VITE_* values into the built frontend.
+ARG VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
 
-FROM base as runner
+RUN pnpm build
 
-ENV NODE_ENV production
+FROM nginx:1.27-alpine AS production
 
-RUN npm install -g serve
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
 
-COPY --from=builder /app/refine/dist ./
+EXPOSE 80
 
-USER refine
-
-CMD ["serve"]
+CMD ["nginx", "-g", "daemon off;"]
