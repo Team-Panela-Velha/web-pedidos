@@ -9,10 +9,6 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-# Vite embeds VITE_* values into the built frontend.
-ARG VITE_API_URL
-ENV VITE_API_URL=${VITE_API_URL}
-
 RUN pnpm build
 
 FROM nginx:1.27-alpine AS production
