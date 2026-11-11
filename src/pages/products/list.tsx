@@ -32,12 +32,6 @@ export const ProductList = () => {
     const columnHelper = createColumnHelper<Product>();
 
     return [
-      columnHelper.accessor("id", {
-        id: "id",
-        header: "ID",
-        enableSorting: false,
-        size: 80,
-      }),
       columnHelper.accessor("image", {
         id: "image",
         header: "Imagem",
@@ -69,11 +63,6 @@ export const ProductList = () => {
         header: "Preço",
         enableSorting: true,
         cell: ({ row }) => formatCurrency(Number(row.original.price) || 0),
-      }),
-      columnHelper.accessor("categoryId", {
-        id: "categoryId",
-        header: "Categoria ID",
-        enableSorting: false,
       }),
       columnHelper.accessor("available", {
         id: "available",

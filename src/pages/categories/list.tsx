@@ -20,11 +20,6 @@ export const CategoryList = () => {
     const columnHelper = createColumnHelper<Category>();
 
     return [
-      columnHelper.accessor("id", {
-        id: "id",
-        header: "ID",
-        enableSorting: false,
-      }),
       columnHelper.accessor("name", {
         id: "name",
         header: "Nome",

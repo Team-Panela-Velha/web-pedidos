@@ -26,11 +26,6 @@ export const ExtraList = () => {
     const columnHelper = createColumnHelper<Extra>();
 
     return [
-      columnHelper.accessor("id", {
-        id: "id",
-        header: "ID",
-        enableSorting: false,
-      }),
       columnHelper.accessor("name", {
         id: "name",
         header: "Nome",

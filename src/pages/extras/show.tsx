@@ -4,7 +4,6 @@ import { ShowView, ShowViewHeader } from "@/components/refine-ui/views/show-view
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,7 +23,6 @@ export const ExtraShow = () => {
       <Card>
         <CardHeader>
           <CardTitle>{record?.data?.name}</CardTitle>
-          <CardDescription>ID do Extra: {record?.data?.id}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

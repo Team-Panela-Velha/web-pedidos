@@ -19,11 +19,6 @@ export const TableList = () => {
     const columnHelper = createColumnHelper<Table_>();
 
     return [
-      columnHelper.accessor("id", {
-        id: "id",
-        header: "ID",
-        enableSorting: false,
-      }),
       columnHelper.accessor("code", {
         id: "code",
         header: "Código",

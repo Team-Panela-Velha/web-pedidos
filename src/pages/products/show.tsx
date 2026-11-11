@@ -4,7 +4,6 @@ import { ShowView, ShowViewHeader } from "@/components/refine-ui/views/show-view
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -27,7 +26,6 @@ export const ProductShow = () => {
       <Card>
         <CardHeader>
           <CardTitle>{product?.name}</CardTitle>
-          <CardDescription>ID do Produto: {product?.id}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
@@ -54,12 +52,6 @@ export const ProductShow = () => {
                 <h4 className="text-sm font-medium mb-2">Preço</h4>
                 <p className="text-sm text-muted-foreground">
                   {product?.price != null ? formatCurrency(Number(product.price)) : "-"}
-                </p>
-              </div>
-              <div>
-                <h4 className="text-sm font-medium mb-2">ID da Categoria</h4>
-                <p className="text-sm text-muted-foreground">
-                  {product?.categoryId ?? "-"}
                 </p>
               </div>
               <div>
