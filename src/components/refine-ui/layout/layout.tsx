@@ -6,6 +6,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import type { PropsWithChildren } from "react";
 import { Sidebar } from "./sidebar";
+import { ChatWidget } from "@/components/chat/chat-widget";
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -36,6 +37,7 @@ export function Layout({ children }: PropsWithChildren) {
             {children}
           </main>
         </SidebarInset>
+        <ChatWidget />
       </SidebarProvider>
     </ThemeProvider>
   );
