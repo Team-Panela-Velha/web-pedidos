@@ -1,6 +1,6 @@
 import type { ExtraResponse } from "../extra/extraTypes";
 
-export type OrderStatus = "RECEIVED" | "IN_PREPARATION" | "READY" | "DELIVERED";
+export type OrderStatus = "RECEIVED" | "IN_PREPARATION" | "READY" | "DELIVERED" | "CANCELLED";
 
 export interface OrderItemRequest {
   productId?: number;

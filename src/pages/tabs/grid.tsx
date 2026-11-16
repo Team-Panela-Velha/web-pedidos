@@ -66,7 +66,16 @@ export const TabGrid = () => {
       await tableQuery.refetch();
       open?.({ message: "Comanda encerrada", type: "success" });
     } catch (error) {
-      open?.({ message: "Erro ao encerrar comanda", description: String(error), type: "error" });
+      let description = "Tente novamente.";
+      if (error instanceof Error && "response" in error && error.response instanceof Response) {
+        const body = await error.response.text().catch(() => "");
+        if (error.response.status === 409) {
+          description = body || "Há pedidos não entregues nesta comanda. Marque todos como entregues antes de encerrar.";
+        } else if (body) {
+          description = body;
+        }
+      }
+      open?.({ message: "Erro ao encerrar comanda", description, type: "error" });
     } finally {
       setClosingId(null);
     }
