@@ -9,7 +9,7 @@ import routerProvider, {
   UnsavedChangesNotifier,
   DocumentTitleHandler,
 } from "@refinedev/react-router";
-import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2, Receipt } from "lucide-react";
+import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2, Receipt, CookingPot } from "lucide-react";
 import { lazy, Suspense } from "react";
 import {
   CategoryList,
@@ -36,6 +36,7 @@ import {
   TableShow,
 } from "./pages/tables";
 import { TabGrid } from "./pages/tabs";
+import { OrdersPage } from "./pages/orders";
 const Dashboard = lazy(() => import("./pages/dashboard").then((module) => ({ default: module.Dashboard })));
 import { dataProvider } from "./providers/data";
 import { authProvider } from "./providers/auth";
@@ -124,6 +125,14 @@ function App() {
                     icon: <Receipt className="h-4 w-4" />,
                   },
                 },
+                {
+                  name: "orders",
+                  list: "/orders",
+                  meta: {
+                    label: "Pedidos",
+                    icon: <CookingPot className="h-4 w-4" />,
+                  },
+                },
               ]}
               options={{
                 syncWithLocation: true,
@@ -174,6 +183,7 @@ function App() {
                     <Route path="show/:id" element={<TableShow />} />
                   </Route>
                   <Route path="/tabs" element={<TabGrid />} />
+                  <Route path="/orders" element={<OrdersPage />} />
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
                 <Route

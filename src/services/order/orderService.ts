@@ -2,6 +2,7 @@ import type {
   CreateOrderRequest,
   OrderRequest,
   OrderResponse,
+  KitchenOrderPage,
 } from "@/types/order/orderTypes";
 import { apiService } from "../apiService";
 
@@ -34,6 +35,16 @@ class OrderService {
 
   getAll(): Promise<OrderResponse[]> {
     return apiService.get<OrderResponse[]>("/orders");
+  }
+
+  getKitchenOrders(delivered: boolean | "all" | undefined, page: number, size: number): Promise<KitchenOrderPage> {
+    return apiService.get<KitchenOrderPage>("/orders/kitchen", {
+      params: { delivered, page, size },
+    });
+  }
+
+  markDelivered(id: number): Promise<OrderResponse> {
+    return apiService.patch<OrderResponse>(`/orders/${id}/delivered`);
   }
 }
 
