@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  CanAccess,
   useMenu,
   useLink,
   useRefineOptions,
@@ -58,11 +59,9 @@ export function Sidebar() {
         )}
       >
         {menuItems.map((item: TreeMenuItem) => (
-          <SidebarItem
-            key={item.key || item.name}
-            item={item}
-            selectedKey={selectedKey}
-          />
+          <CanAccess key={item.key || item.name} resource={item.name} action="list">
+            <SidebarItem item={item} selectedKey={selectedKey} />
+          </CanAccess>
         ))}
       </ShadcnSidebarContent>
     </ShadcnSidebar>

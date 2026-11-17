@@ -1,15 +1,15 @@
-import { Refine, Authenticated } from "@refinedev/core";
+import { Refine, Authenticated, CanAccess } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
-import { BrowserRouter, Route, Routes, Outlet } from "react-router";
+import { BrowserRouter, Route, Routes, Outlet, Navigate } from "react-router";
 import routerProvider, {
   NavigateToResource,
   CatchAllNavigate,
   UnsavedChangesNotifier,
   DocumentTitleHandler,
 } from "@refinedev/react-router";
-import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2, Receipt, CookingPot } from "lucide-react";
+import { LayoutDashboard, FolderTree, Package, PlusCircle, Table2, Receipt, CookingPot, Users } from "lucide-react";
 import { lazy, Suspense } from "react";
 import {
   CategoryList,
@@ -37,6 +37,8 @@ import {
 } from "./pages/tables";
 import { TabGrid } from "./pages/tabs";
 import { OrdersPage } from "./pages/orders";
+import { UsersPage } from "./pages/users";
+import { accessControlProvider, currentRole, homeFor } from "./providers/access";
 const Dashboard = lazy(() => import("./pages/dashboard").then((module) => ({ default: module.Dashboard })));
 import { dataProvider } from "./providers/data";
 import { authProvider } from "./providers/auth";
@@ -60,6 +62,7 @@ function App() {
               notificationProvider={useNotificationProvider()}
               routerProvider={routerProvider}
               authProvider={authProvider}
+              accessControlProvider={accessControlProvider}
               resources={[
                 {
                   name: "dashboard",
@@ -133,6 +136,14 @@ function App() {
                     icon: <CookingPot className="h-4 w-4" />,
                   },
                 },
+                {
+                  name: "users",
+                  list: "/users",
+                  meta: {
+                    label: "Usuários",
+                    icon: <Users className="h-4 w-4" />,
+                  },
+                },
               ]}
               options={{
                 syncWithLocation: true,
@@ -152,7 +163,10 @@ function App() {
                       fallback={<CatchAllNavigate to="/login" />}
                     >
                       <Layout>
-                        <Outlet />
+                        {/* page outside the role's view: send the user to their own home page */}
+                        <CanAccess fallback={<Navigate to={homeFor(currentRole())} replace />}>
+                          <Outlet />
+                        </CanAccess>
                       </Layout>
                     </Authenticated>
                   }
@@ -184,6 +198,7 @@ function App() {
                   </Route>
                   <Route path="/tabs" element={<TabGrid />} />
                   <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/users" element={<UsersPage />} />
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
                 <Route
