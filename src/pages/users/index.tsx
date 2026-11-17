@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { Loader2, Trash2 } from "lucide-react";
-import { useGetIdentity, useNotification } from "@refinedev/core";
+import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { useGetIdentity, useLogout, useNotification } from "@refinedev/core";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,9 +36,11 @@ async function errorMessage(error: unknown): Promise<string> {
 export const UsersPage = () => {
   const { open } = useNotification();
   const { data: me } = useGetIdentity<UserResponse>();
+  const { mutate: logout } = useLogout();
   const [users, setUsers] = useState<UserResponse[] | null>(null);
   const [form, setForm] = useState<RegisterRequest>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState<{ id: number; name: string; email: string; password: string } | null>(null);
 
   const fail = useCallback(
     async (error: unknown) => open?.({ type: "error", message: await errorMessage(error) }),
@@ -52,6 +54,27 @@ export const UsersPage = () => {
   // Only the global admin may create or manage administrators (the API enforces the same rule).
   const roleOptions = me?.root ? ["ADMIN", "WAITER", "KITCHEN"] : ["WAITER", "KITCHEN"];
   const canManage = (user: UserResponse) => !user.root && (me?.root || !isAdminLevel(user.role));
+  const canEdit = (user: UserResponse) => canManage(user) || (user.root === true && me?.root === true);
+
+  const saveEdit = async (event: FormEvent, user: UserResponse) => {
+    event.preventDefault();
+    if (!editing) return;
+    try {
+      await userService.update(user.id, {
+        name: editing.name,
+        email: editing.email,
+        role: user.role,
+        password: editing.password || undefined,
+      });
+      open?.({ type: "success", message: `Usuário ${editing.name} atualizado.` });
+      setEditing(null);
+      // the session token is tied to the e-mail: changing your own e-mail requires a new login
+      if (user.id === me?.id && editing.email !== user.email) logout();
+      else load();
+    } catch (error) {
+      await fail(error);
+    }
+  };
 
   const create = async (event: FormEvent) => {
     event.preventDefault();
@@ -138,7 +161,30 @@ export const UsersPage = () => {
             <p className="text-sm text-muted-foreground">Nenhum usuário cadastrado.</p>
           ) : (
             <ul className="divide-y">
-              {users.map((user) => (
+              {users.map((user) => editing?.id === user.id ? (
+                <li key={user.id} className="py-3">
+                  <form onSubmit={(event) => saveEdit(event, user)} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+                    <div className="space-y-2">
+                      <Label htmlFor="edit-name">Nome</Label>
+                      <Input id="edit-name" required value={editing.name}
+                        onChange={(event) => setEditing({ ...editing, name: event.target.value })} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="edit-email">E-mail</Label>
+                      <Input id="edit-email" type="email" required value={editing.email}
+                        onChange={(event) => setEditing({ ...editing, email: event.target.value })} />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="edit-password">Nova senha</Label>
+                      <Input id="edit-password" type="password" minLength={6} placeholder="Deixe vazio para manter"
+                        autoComplete="new-password" value={editing.password}
+                        onChange={(event) => setEditing({ ...editing, password: event.target.value })} />
+                    </div>
+                    <Button type="submit">Salvar</Button>
+                    <Button type="button" variant="outline" onClick={() => setEditing(null)}>Cancelar</Button>
+                  </form>
+                </li>
+              ) : (
                 <li key={user.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                   <div>
                     <p className="font-medium">
@@ -158,6 +204,12 @@ export const UsersPage = () => {
                       </select>
                     ) : (
                       <Badge variant="secondary">{roleLabels[user.role] ?? user.role}</Badge>
+                    )}
+                    {canEdit(user) && (
+                      <Button variant="ghost" size="icon" aria-label={`Editar ${user.name}`}
+                        onClick={() => setEditing({ id: user.id, name: user.name, email: user.email, password: "" })}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
                     )}
                     {canManage(user) && (
                       <Button variant="ghost" size="icon" aria-label={`Excluir ${user.name}`} onClick={() => remove(user)}>

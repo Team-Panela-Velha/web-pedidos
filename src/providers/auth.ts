@@ -3,6 +3,7 @@ import { authService } from "@/services/auth/authService";
 import { apiService } from "@/services/apiService";
 import type { UserResponse } from "@/types/user/userTypes";
 import { TOKEN_KEY } from "./constants";
+import { homeFor } from "./access";
 
 const IDENTITY_KEY = "refine-identity";
 
@@ -20,7 +21,7 @@ export const authProvider: AuthProvider = {
       sessionStorage.setItem(IDENTITY_KEY, JSON.stringify({
         id: response.id, name: response.name, email: response.email, role: response.role,
       }));
-      return { success: true, redirectTo: "/" };
+      return { success: true, redirectTo: homeFor(response.role) };
     } catch (error) {
       clearSession();
       const status = (error as { status?: number }).status;
