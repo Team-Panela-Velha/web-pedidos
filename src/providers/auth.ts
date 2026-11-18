@@ -18,9 +18,11 @@ export const authProvider: AuthProvider = {
     try {
       const response = await authService.login({ email, password });
       sessionStorage.setItem(TOKEN_KEY, response.token);
-      sessionStorage.setItem(IDENTITY_KEY, JSON.stringify({
+      // /auth/me carries the "root" flag the users page needs; the login response does not.
+      const me = await apiService.get<UserResponse>("/auth/me").catch(() => ({
         id: response.id, name: response.name, email: response.email, role: response.role,
       }));
+      sessionStorage.setItem(IDENTITY_KEY, JSON.stringify(me));
       return { success: true, redirectTo: homeFor(response.role) };
     } catch (error) {
       clearSession();
