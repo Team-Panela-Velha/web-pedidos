@@ -22,6 +22,7 @@ type Tab = BaseRecord & {
   closed: boolean;
   tableId: number;
   tableCode: string;
+  tableNumber?: number | null;
   openedAt?: string;
 };
 
@@ -146,7 +147,7 @@ export const TabGrid = () => {
             <Card key={tab.id}>
               <CardHeader className="flex flex-row items-start justify-between gap-2">
                 <div>
-                  <CardTitle>Mesa {tab.tableCode || ""}</CardTitle>
+                  <CardTitle>Mesa {tab.tableNumber ?? tab.tableCode ?? ""}</CardTitle>
                 </div>
                 <Badge variant={tab.closed ? "secondary" : "default"}>{tab.closed ? "Encerrada" : "Aberta"}</Badge>
               </CardHeader>
@@ -191,7 +192,7 @@ export const TabGrid = () => {
           ) : selectedTab && (
             <div className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-4">
-                <div><p className="font-medium">Mesa {selectedTab.tableCode || ""}</p><p className="text-sm text-muted-foreground">{selectedTab.closed ? "Encerrada" : "Aberta"}</p></div>
+                <div><p className="font-medium">Mesa {selectedTab.tableNumber ?? selectedTab.tableCode ?? ""}</p><p className="text-sm text-muted-foreground">{selectedTab.closed ? "Encerrada" : "Aberta"}</p></div>
                 <p className="font-heading text-xl font-bold">{currency.format(Number(selectedTab.totalValue) || 0)}</p>
               </div>
               {tabOrders.length === 0 ? (

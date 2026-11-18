@@ -13,4 +13,5 @@ export interface TabResponse {
   closed: boolean;
   tableId: number;
   tableCode: string;
+  tableNumber?: number | null;
 }

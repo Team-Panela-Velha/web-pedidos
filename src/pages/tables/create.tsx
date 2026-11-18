@@ -24,7 +24,7 @@ export const TableCreate = () => {
   });
 
   function onSubmit(values: Record<string, string>) {
-    onFinish(values);
+    onFinish({ number: values.number ? Number(values.number) : null });
   }
 
   return (
@@ -34,18 +34,23 @@ export const TableCreate = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="code"
-            rules={{ required: "Código é obrigatório" }}
+            name="number"
+            rules={{ min: { value: 1, message: "O número deve ser maior que zero" } }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Código da Mesa</FormLabel>
+                <FormLabel>Número da Mesa</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    value={field.value || ""}
-                    placeholder="Ex: MESA-01"
+                    type="number"
+                    min={1}
+                    value={field.value ?? ""}
+                    placeholder="Vazio = próximo número livre"
                   />
                 </FormControl>
+                <p className="text-sm text-muted-foreground">
+                  O código de acesso do tablet é gerado automaticamente.
+                </p>
                 <FormMessage />
               </FormItem>
             )}

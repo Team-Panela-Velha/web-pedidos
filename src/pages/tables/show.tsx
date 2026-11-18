@@ -16,14 +16,20 @@ export const TableShow = () => {
       <ShowViewHeader />
       <Card>
         <CardHeader>
-          <CardTitle>{record?.data?.code}</CardTitle>
+          <CardTitle>Mesa {record?.number ?? record?.code}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
-              <h4 className="text-sm font-medium mb-2">Código</h4>
+              <h4 className="text-sm font-medium mb-2">Número</h4>
               <p className="text-sm text-muted-foreground">
-                {record?.data?.code || "-"}
+                {record?.number ?? "-"}
+              </p>
+            </div>
+            <div>
+              <h4 className="text-sm font-medium mb-2">Código de acesso (tablet)</h4>
+              <p className="text-sm text-muted-foreground">
+                {record?.code || "-"}
               </p>
             </div>
           </div>

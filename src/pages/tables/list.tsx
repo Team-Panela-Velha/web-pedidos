@@ -12,6 +12,7 @@ import { DeleteButton } from "@/components/refine-ui/buttons/delete";
 type Table_ = BaseRecord & {
   id: number;
   code: string;
+  number: number | null;
 };
 
 export const TableList = () => {
@@ -19,9 +20,14 @@ export const TableList = () => {
     const columnHelper = createColumnHelper<Table_>();
 
     return [
+      columnHelper.accessor("number", {
+        id: "number",
+        header: "Mesa",
+        enableSorting: true,
+      }),
       columnHelper.accessor("code", {
         id: "code",
-        header: "Código",
+        header: "Código de acesso",
         enableSorting: true,
       }),
       columnHelper.display({

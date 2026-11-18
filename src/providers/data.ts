@@ -20,8 +20,8 @@ const searchableFields: Record<string, string[]> = {
   categories: ["name", "description"],
   products: ["name", "description", "categoryId"],
   extras: ["name"],
-  tables: ["code"],
-  tabs: ["id", "tableCode"],
+  tables: ["number", "code"],
+  tabs: ["id", "tableNumber", "tableCode"],
 };
 
 function matchesFilter(record: ApiRecord, filter: CrudFilter, resource: string): boolean {

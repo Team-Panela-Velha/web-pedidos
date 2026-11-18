@@ -91,7 +91,7 @@ export const OrdersPage = () => {
             <Card key={order.id} className="overflow-hidden">
               <CardHeader className="flex flex-row items-start justify-between gap-3 bg-secondary/50">
                 <div>
-                  <CardTitle className="text-2xl">Mesa {order.tableCode || "—"}</CardTitle>
+                  <CardTitle className="text-2xl">Mesa {order.tableNumber ?? order.tableCode ?? "—"}</CardTitle>
                   <p className="mt-1 text-sm text-muted-foreground">Comanda #{order.tabId} · Pedido #{order.id}</p>
                   <p className="text-sm text-muted-foreground">{date.format(new Date(order.createdAt))}</p>
                 </div>

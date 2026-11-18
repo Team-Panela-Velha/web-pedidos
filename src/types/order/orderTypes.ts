@@ -17,6 +17,7 @@ export interface OrderResponse {
   delivered: boolean;
   deliveredAt: string | null;
   tableCode: string | null;
+  tableNumber?: number | null;
   tabClosed: boolean | null;
   status: OrderStatus;
 }
