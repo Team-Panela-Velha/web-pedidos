@@ -218,7 +218,20 @@ function App() {
               <Toaster />
               <RefineKbar />
               <UnsavedChangesNotifier />
-              <DocumentTitleHandler />
+              <DocumentTitleHandler
+                handler={({ resource, action, params }) => {
+                  const label = resource?.meta?.label ?? resource?.name;
+                  if (!label) return "Pokes e Boas";
+                  const actions: Record<string, string> = {
+                    create: "Novo",
+                    edit: "Editar",
+                    show: "Ver",
+                  };
+                  const prefix = action && actions[action] ? `${actions[action]} - ` : "";
+                  const id = params?.id ? ` #${params.id}` : "";
+                  return `${prefix}${label}${id} | Pokes e Boas`;
+                }}
+              />
             </Refine>
             <DevtoolsPanel />
           </DevtoolsProvider>

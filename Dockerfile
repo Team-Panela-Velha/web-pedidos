@@ -9,7 +9,9 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm build
+# Opcional: endereco da API visto pelo navegador. Vazio = usa o VITE_API_URL do .env.
+ARG VITE_API_URL
+RUN if [ -z "$VITE_API_URL" ]; then unset VITE_API_URL; fi && pnpm build
 
 FROM nginx:1.27-alpine AS production
 
