@@ -14,8 +14,8 @@ export const SignInForm = () => {
 
   return (
     <main className="flex min-h-svh flex-col items-center justify-center bg-[radial-gradient(circle_at_top,var(--secondary),transparent_48%)] px-6 py-8">
-      <div className="text-foreground [&>svg]:h-12 [&>svg]:w-12">{title.icon}</div>
-      <Card className="mt-6 w-full max-w-[456px] p-6 sm:p-10">
+      <Card className="w-full max-w-[456px] p-6 sm:p-10">
+        <div className="flex justify-center text-foreground [&>svg]:h-12 [&>svg]:w-12">{title.icon}</div>
         <CardHeader className="px-0">
           <CardTitle className="text-3xl font-semibold text-accent-foreground">Entrar</CardTitle>
           <CardDescription>Acesse o painel administrativo.</CardDescription>
