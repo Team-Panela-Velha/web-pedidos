@@ -124,7 +124,10 @@ function MobileHeader() {
         </h2>
       </div>
 
-      <ThemeToggle className={cn("h-8", "w-8")} />
+      <div className="flex items-center gap-2">
+        <ThemeToggle className={cn("h-8", "w-8")} />
+        <UserDropdown />
+      </div>
     </header>
   );
 }
